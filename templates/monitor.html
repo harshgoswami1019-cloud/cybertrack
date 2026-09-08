@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CyberTrack | Live Monitor</title>
+
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="monitor-body">
+
+
+<div class="monitor-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand sidebar-brand">
+
+            <div class="brand-icon">
+                ◉
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    CYBER<span>TRACK</span>
+                </div>
+
+                <div class="brand-subtitle">
+                    MONITOR
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="side-heading">
+            SYSTEM
+        </div>
+
+
+        <div class="system-card">
+
+            <div class="system-row">
+
+                <span>
+                    NETWORK
+                </span>
+
+                <strong>
+                    SECURE
+                </strong>
+
+            </div>
+
+
+            <div class="system-row">
+
+                <span>
+                    TRACKING
+                </span>
+
+                <strong id="sideTracking">
+                    WAITING
+                </strong>
+
+            </div>
+
+
+            <div class="system-row">
+
+                <span>
+                    DATABASE
+                </span>
+
+                <strong>
+                    ONLINE
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="side-heading">
+            SESSION
+        </div>
+
+
+        <div class="token-card">
+
+            <small>
+                MONITOR TOKEN
+            </small>
+
+            <div id="tokenShort">
+                ----------
+            </div>
+
+        </div>
+
+
+        <div class="terminal-box">
+
+            <div>
+                > booting cybertrack...
+            </div>
+
+            <div>
+                > database connected
+            </div>
+
+            <div>
+                > map engine loaded
+            </div>
+
+            <div>
+                > monitoring session
+            </div>
+
+            <div
+                id="terminalLine"
+                class="terminal-green"
+            >
+                > waiting for GPS...
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-actions">
+
+            <a href="/">
+                + NEW SESSION
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="monitor-main">
+
+
+        <!-- TOP -->
+
+        <div class="monitor-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    > LIVE LOCATION INTELLIGENCE
+                </div>
+
+                <h1 class="monitor-title">
+                    Command
+                    <span>Center</span>
+                </h1>
+
+            </div>
+
+
+            <div
+                id="connectionBadge"
+                class="connection-badge"
+            >
+
+                <span class="online-dot"></span>
+
+                WAITING
+
+            </div>
+
+        </div>
+
+
+        <!-- MAP -->
+
+        <section class="map-section">
+
+            <div class="map-header">
+
+                <div>
+                    LIVE MAP
+                </div>
+
+                <div id="lastUpdate">
+                    LAST UPDATE: --
+                </div>
+
+            </div>
+
+
+            <div id="map"></div>
+
+        </section>
+
+
+        <!-- STAT CARDS -->
+
+        <section class="dashboard-stats">
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    LATITUDE
+                </small>
+
+                <strong id="latitude">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    LONGITUDE
+                </small>
+
+                <strong id="longitude">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    GPS ACCURACY
+                </small>
+
+                <strong id="accuracy">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    DISTANCE
+                </small>
+
+                <strong id="distance">
+                    0.00 km
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    DURATION
+                </small>
+
+                <strong id="duration">
+                    00:00:00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <small>
+                    POINTS
+                </small>
+
+                <strong id="points">
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ACTIONS -->
+
+        <section class="monitor-actions">
+
+            <button
+                id="refreshButton"
+                class="secondary-button"
+            >
+                ↻ REFRESH
+            </button>
+
+
+            <button
+                id="exportButton"
+                class="secondary-button"
+            >
+                ↓ EXPORT CSV
+            </button>
+
+
+            <button
+                id="deleteButton"
+                class="danger-button"
+            >
+                × DELETE HISTORY
+            </button>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section class="history-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        > DATA LOG
+                    </div>
+
+                    <h2>
+                        Location History
+                    </h2>
+
+                </div>
+
+
+                <div
+                    id="historyCount"
+                    class="history-count"
+                >
+                    0 RECORDS
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                TIME
+                            </th>
+
+                            <th>
+                                LATITUDE
+                            </th>
+
+                            <th>
+                                LONGITUDE
+                            </th>
+
+                            <th>
+                                ACCURACY
+                            </th>
+
+                            <th>
+                                DISTANCE
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="historyBody">
+
+                        <tr>
+
+                            <td colspan="5">
+                                Waiting for location data...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const MONITOR_TOKEN =
+        "{{ monitor_token }}";
+
+    const SESSION_EXPIRES =
+        "{{ expires_at }}";
+
+</script>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<script src="{{ url_for('static', filename='js/monitor.js') }}"></script>
+
+
+</body>
+
+</html>

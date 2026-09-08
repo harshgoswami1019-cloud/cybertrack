@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CyberTrack | Share Location</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="grid-background"></div>
+
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ◉
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                CYBER<span>TRACK</span>
+            </div>
+
+            <div class="brand-subtitle">
+                LOCATION SHARING
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="top-status">
+
+        <span
+            id="statusDot"
+            class="online-dot offline"
+        ></span>
+
+        <span id="topStatus">
+            NOT SHARING
+        </span>
+
+    </div>
+
+</header>
+
+
+<main class="share-container">
+
+    <section class="share-card">
+
+        <div class="eyebrow">
+            > AUTHORIZED LOCATION SHARE
+        </div>
+
+
+        <h1>
+            Share Your
+            <span>Location</span>
+        </h1>
+
+
+        <p class="share-description">
+
+            Your browser will ask for location permission.
+            Your location will only be transmitted after
+            you explicitly allow access and start sharing.
+
+        </p>
+
+
+        <div class="privacy-box">
+
+            <div class="privacy-icon">
+                🔐
+            </div>
+
+            <div>
+
+                <strong>
+                    PRIVACY NOTICE
+                </strong>
+
+                <p>
+                    You control this session.
+                    Press STOP at any time to stop
+                    sending your location.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="share-status-box">
+
+            <div class="status-label">
+                CURRENT STATUS
+            </div>
+
+            <div
+                id="shareStatus"
+                class="big-status"
+            >
+                READY
+            </div>
+
+            <div
+                id="shareMessage"
+                class="status-message"
+            >
+                Location has not been shared.
+            </div>
+
+        </div>
+
+
+        <div class="share-buttons">
+
+            <button
+                id="startButton"
+                class="primary-button"
+            >
+                START LOCATION SHARING
+            </button>
+
+            <button
+                id="stopButton"
+                class="danger-button"
+                disabled
+            >
+                STOP SHARING
+            </button>
+
+        </div>
+
+
+        <div class="coordinates-grid">
+
+            <div class="coordinate-card">
+
+                <small>
+                    LATITUDE
+                </small>
+
+                <strong id="latitude">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="coordinate-card">
+
+                <small>
+                    LONGITUDE
+                </small>
+
+                <strong id="longitude">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="coordinate-card">
+
+                <small>
+                    ACCURACY
+                </small>
+
+                <strong id="accuracy">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="coordinate-card">
+
+                <small>
+                    LAST SENT
+                </small>
+
+                <strong id="lastSent">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="expiry-line">
+
+            SESSION EXPIRES:
+
+            <span id="expiryTime">
+                --
+            </span>
+
+        </div>
+
+
+        <div
+            id="shareError"
+            class="error-message hidden"
+        ></div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const SHARE_TOKEN =
+        "{{ share_token }}";
+
+    const SESSION_EXPIRES =
+        "{{ expires_at }}";
+
+</script>
+
+
+<script src="{{ url_for('static', filename='js/share.js') }}"></script>
+
+</body>
+
+</html>

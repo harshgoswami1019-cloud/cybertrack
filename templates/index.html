@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CyberTrack | Location Intelligence</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="grid-background"></div>
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ◉
+        </div>
+
+        <div>
+            <div class="brand-name">
+                CYBER<span>TRACK</span>
+            </div>
+
+            <div class="brand-subtitle">
+                LOCATION INTELLIGENCE
+            </div>
+        </div>
+
+    </div>
+
+    <div class="top-status">
+
+        <span class="online-dot"></span>
+
+        SYSTEM ONLINE
+
+    </div>
+
+</header>
+
+
+<main class="landing">
+
+    <section class="landing-card">
+
+        <div class="eyebrow">
+            > SECURE LOCATION PLATFORM
+        </div>
+
+        <h1>
+            Track.
+            <span>With Consent.</span>
+        </h1>
+
+        <p class="landing-description">
+
+            A real-time location sharing platform built
+            with Flask, JavaScript, SQLite and OpenStreetMap.
+
+            Location access is always controlled by
+            the person sharing their device location.
+
+        </p>
+
+
+        <div class="feature-row">
+
+            <div class="feature">
+                <span>◉</span>
+                LIVE MAP
+            </div>
+
+            <div class="feature">
+                <span>◉</span>
+                GPS DATA
+            </div>
+
+            <div class="feature">
+                <span>◉</span>
+                HISTORY
+            </div>
+
+            <div class="feature">
+                <span>◉</span>
+                CSV EXPORT
+            </div>
+
+        </div>
+
+
+        <button
+            id="createSession"
+            class="primary-button"
+        >
+
+            CREATE TRACKING SESSION
+
+        </button>
+
+
+        <div
+            id="resultPanel"
+            class="result-panel hidden"
+        >
+
+            <div class="result-title">
+                SESSION CREATED
+            </div>
+
+
+            <div class="link-box">
+
+                <label>
+                    SHARE LINK
+                </label>
+
+                <div class="copy-row">
+
+                    <input
+                        id="shareLink"
+                        readonly
+                    >
+
+                    <button id="copyShare">
+                        COPY
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="link-box">
+
+                <label>
+                    MONITOR LINK
+                </label>
+
+                <div class="copy-row">
+
+                    <input
+                        id="monitorLink"
+                        readonly
+                    >
+
+                    <button id="copyMonitor">
+                        COPY
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="session-warning">
+
+                ⚠ Keep the monitor link private.
+                It provides access to this session's location data.
+
+            </div>
+
+
+            <div class="open-buttons">
+
+                <a
+                    id="openShare"
+                    target="_blank"
+                    class="secondary-button"
+                >
+                    OPEN SHARE PAGE
+                </a>
+
+                <a
+                    id="openMonitor"
+                    target="_blank"
+                    class="secondary-button"
+                >
+                    OPEN MONITOR
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    CYBERTRACK V2
+    <span>•</span>
+    CONSENT-BASED LOCATION SHARING
+
+</footer>
+
+
+<script>
+
+    const createButton =
+        document.getElementById("createSession");
+
+    const resultPanel =
+        document.getElementById("resultPanel");
+
+    const shareLinkInput =
+        document.getElementById("shareLink");
+
+    const monitorLinkInput =
+        document.getElementById("monitorLink");
+
+    const copyShare =
+        document.getElementById("copyShare");
+
+    const copyMonitor =
+        document.getElementById("copyMonitor");
+
+    const openShare =
+        document.getElementById("openShare");
+
+    const openMonitor =
+        document.getElementById("openMonitor");
+
+
+    async function createSession() {
+
+        createButton.disabled = true;
+
+        createButton.textContent =
+            "CREATING SECURE SESSION...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/session/create",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!data.success) {
+                throw new Error("Session creation failed.");
+            }
+
+            const baseUrl =
+                window.location.origin;
+
+            const shareUrl =
+                `${baseUrl}/share/${data.share_token}`;
+
+            const monitorUrl =
+                `${baseUrl}/monitor/${data.monitor_token}`;
+
+
+            shareLinkInput.value =
+                shareUrl;
+
+            monitorLinkInput.value =
+                monitorUrl;
+
+            openShare.href =
+                shareUrl;
+
+            openMonitor.href =
+                monitorUrl;
+
+            resultPanel.classList.remove("hidden");
+
+            createButton.textContent =
+                "SESSION CREATED ✓";
+
+        } catch (error) {
+
+            console.error(error);
+
+            createButton.textContent =
+                "CREATION FAILED";
+
+            createButton.disabled = false;
+
+        }
+
+    }
+
+
+    async function copyText(input, button) {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                input.value
+            );
+
+            const oldText =
+                button.textContent;
+
+            button.textContent =
+                "COPIED ✓";
+
+            setTimeout(() => {
+                button.textContent = oldText;
+            }, 1500);
+
+        } catch {
+
+            input.select();
+
+            document.execCommand("copy");
+
+            button.textContent =
+                "COPIED ✓";
+
+            setTimeout(() => {
+                button.textContent = "COPY";
+            }, 1500);
+
+        }
+
+    }
+
+
+    createButton.addEventListener(
+        "click",
+        createSession
+    );
+
+
+    copyShare.addEventListener(
+        "click",
+        () => copyText(
+            shareLinkInput,
+            copyShare
+        )
+    );
+
+
+    copyMonitor.addEventListener(
+        "click",
+        () => copyText(
+            monitorLinkInput,
+            copyMonitor
+        )
+    );
+
+</script>
+
+</body>
+
+</html>

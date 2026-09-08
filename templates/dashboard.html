@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CyberTrack Dashboard</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="logo-symbol">⌁</span>
+            CYBER<span>TRACK</span>
+        </div>
+
+        <div class="sidebar-title">
+            MONITORING SYSTEM
+        </div>
+
+        <div class="side-status">
+            <div class="status-row">
+                <span>NETWORK</span>
+                <strong>SECURE</strong>
+            </div>
+
+            <div class="status-row">
+                <span>SYSTEM</span>
+                <strong>ONLINE</strong>
+            </div>
+
+            <div class="status-row">
+                <span>SESSION</span>
+                <strong id="sessionShort">--</strong>
+            </div>
+        </div>
+
+        <div class="terminal">
+
+            <div>> initializing tracker...</div>
+            <div>> loading map...</div>
+            <div>> connecting database...</div>
+            <div>> waiting for location...</div>
+
+            <div id="terminalStatus">
+                > system ready_
+            </div>
+
+        </div>
+
+        <a class="back-link" href="/">
+            ← LOCATION SHARING
+        </a>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="terminal-label">
+                    > LIVE MONITOR
+                </div>
+
+                <h1>
+                    Location
+                    <span>Dashboard</span>
+                </h1>
+
+            </div>
+
+            <div id="connectionStatus"
+                 class="connection online">
+
+                <span class="status-dot"></span>
+                WAITING
+
+            </div>
+
+        </div>
+
+
+        <section class="map-panel">
+
+            <div id="map"></div>
+
+        </section>
+
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <small>LATITUDE</small>
+
+                <div id="dashLatitude">
+                    --
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <small>LONGITUDE</small>
+
+                <div id="dashLongitude">
+                    --
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <small>ACCURACY</small>
+
+                <div id="dashAccuracy">
+                    --
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <small>LAST UPDATE</small>
+
+                <div id="dashTime">
+                    --
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="history-panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    LOCATION HISTORY
+                </h2>
+
+                <button id="refreshHistory">
+                    REFRESH
+                </button>
+
+            </div>
+
+            <div class="history-table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>TIME</th>
+                        <th>LATITUDE</th>
+                        <th>LONGITUDE</th>
+                        <th>ACCURACY</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="historyBody">
+
+                    <tr>
+                        <td colspan="4">
+                            NO DATA
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+    const SESSION_ID = "{{ session_id }}";
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+</html>
